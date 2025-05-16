@@ -93,10 +93,46 @@ describe Board do
 
       it 'places a token within the @board' do
         token = 'O'
-        board.place_token(token, rand(1..7))
+        board.place_token(token, rand(0..6))
         gameboard = board.gameboard
-        result = gameboard.flatten.include? token
+        result = gameboard.flatten.include?(token)
         expect(result).to be true
+      end
+
+      it 'places the correct number of tokens' do
+        iterations = 5
+        token = 'O'
+        iterations.times { board.place_token(token, rand(0..6)) }
+        result = board.spaces_left
+        expect(result).to eql(42 - iterations)
+      end
+
+      it 'places a large number of tokens' do
+        iterations = 27
+        token = 'O'
+        iterations.times { board.place_token(token, rand(0..6)) }
+        result = board.spaces_left
+        expect(result).to be_positive
+      end
+    end
+
+    describe '#valid?' do
+      it 'returns true for a simple array' do
+        test = [3, 4, nil]
+        result = Board.new.valid?(test)
+        expect(result).to be true
+      end
+
+      it 'returns false for a nil input' do
+        test = nil
+        result = Board.new.valid?(test)
+        expect(result).to be false
+      end
+
+      it 'returns false for a full col' do 
+        test = [1, 2, 3, 4, 5, 6]
+        result = Board.new.valid?(test)
+        expect(result).to be false
       end
     end
   end
