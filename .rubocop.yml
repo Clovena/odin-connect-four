@@ -1,3 +1,0 @@
-bundle exec rubocop --init
-  inherit_from: ~/.rubocop.yml 
-  require: rubocop-performance
