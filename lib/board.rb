@@ -4,16 +4,18 @@
 class Board
   BASE_COL = '0'.ord
 
-  attr_accessor :gameboard, :rows
+  attr_accessor :gameboard, :rows, :cols
 
-  def initialize(gameboard = Array.new(6) { Array.new(7) })
-    @gameboard = gameboard
-    @rows = gameboard.size
+  def initialize(rows = 6, cols = 7)
+    @gameboard = Array.new(rows) { Array.new(cols) }
+    @rows = rows
+    @cols = cols
   end
 
   def to_s
     @gameboard.each do |row|
-      p row
+      out = row.map { |elem| elem.nil? ? '⚪️' : elem }.join(' ')
+      puts out
     end
   end
 
@@ -23,6 +25,24 @@ class Board
 
   def full?
     spaces_left.zero?
+  end
+
+  def diagonals
+    result = []
+    3.times do |i| 
+      4.times do |j|
+        fwd = [@gameboard[i][j], @gameboard[i + 1][j + 1],
+               @gameboard[i + 2][j + 2], @gameboard[i + 3][j + 3]]
+        bwd = [@gameboard[i][-(j + 1)], @gameboard[i + 1][-(j + 2)],
+               @gameboard[i + 2][-(j + 3)], @gameboard[i + 3][-(j + 4)]]
+        result << fwd << bwd
+      end
+    end
+    result
+  end
+
+  def transform_diagonals(base, pad)
+    pad.reverse.zip(base).zip(pad).map(&:flatten).transpose.map(&:compact)
   end
 
   def take_turn(token)
