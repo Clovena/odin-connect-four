@@ -6,7 +6,7 @@ class Board
 
   attr_accessor :gameboard, :rows
 
-  def initialize(gameboard = Array.new(6, Array.new(7)))
+  def initialize(gameboard = Array.new(6) { Array.new(7) })
     @gameboard = gameboard
     @rows = gameboard.size
   end
@@ -21,7 +21,7 @@ class Board
     matrix.flatten.count(nil)
   end
 
-  def empty?
+  def full?
     spaces_left.zero?
   end
 
